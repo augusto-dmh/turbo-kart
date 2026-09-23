@@ -1,0 +1,12 @@
+/* STUB — owned by Agent 4 (UI, HUD & Audio). Replace with the full stylesheet. */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #0b1020; }
+#app { position: fixed; inset: 0; }
+#game-canvas { display: block; width: 100%; height: 100%; }
+#ui-root { position: absolute; inset: 0; pointer-events: none; font-family: system-ui, sans-serif; color: #fff; }
+#ui-root .clickable { pointer-events: auto; }
+#boot-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: #0b1020; color: #fff; transition: opacity .4s; }
+#boot-overlay.hidden { opacity: 0; pointer-events: none; }
+#boot-overlay h1 { letter-spacing: .3em; font-size: 40px; margin: 0 0 12px; }
+.boot-bar { width: 320px; height: 6px; background: #ffffff22; border-radius: 3px; overflow: hidden; }
+#boot-bar-fill { height: 100%; width: 5%; background: linear-gradient(90deg,#ffd400,#ff3b30); transition: width .3s; }
