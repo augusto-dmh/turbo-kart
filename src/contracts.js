@@ -10,7 +10,12 @@
  * Conventions:
  *  - Units: meters, seconds, radians. Y is up. Right-handed coordinates.
  *  - `u` is normalized track progress in [0,1) measured along the centerline.
- *  - lateral offset is signed: positive = left of the direction of travel.
+ *  - lateral offset is signed. NOTE (verified 2026-09-23 with the real track and
+ *    the real Kart): the shipped `TrackApi` reports **positive = RIGHT of travel**
+ *    (`pointAt(u, +1)` is to the driver's right). The contract's original wording
+ *    said "left"; the implementation is the source of truth. Steering is separate
+ *    and IS "positive = left": `input.steer > 0` turns the kart left, and yaw
+ *    increases when turning left. Do not assume `lateral` and `steer` share a sign.
  * ============================================================================
  */
 
@@ -240,9 +245,11 @@ export function createInputState() {
  * @property {number} length                centerline length in meters
  * @property {number} halfWidth             road half-width in meters
  * @property {(u:number, lateral?:number)=>any} pointAt   world position at u
+ *           (verified: `lateral > 0` is to the driver's RIGHT of travel)
  * @property {(u:number)=>any} tangentAt                  unit tangent at u
  * @property {(pos:any)=>{u:number, lateral:number, onRoad:boolean, tangent:any, up:any}} project
  *           nearest-centerline projection of a world position
+ *           (`lateral > 0` = right of travel; see the file header note)
  * @property {any[]} startGrid              RACE.KART_COUNT grid slots, index 0 = pole
  * @property {number} startU                u of the start/finish line
  * @property {number[]} checkpointUs        ascending u values of checkpoints (last = finish)

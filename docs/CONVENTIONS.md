@@ -5,7 +5,12 @@ Shared rules for every subsystem agent. **Read this before writing code.**
 ## Coordinates & units
 - Meters, seconds, radians. Y is up. Right-handed (Three.js default).
 - `u` = normalized progress along the track centerline, `[0, 1)`, increasing in the
-  direction of travel. `lateral` offset is signed: **positive = left** of travel.
+  direction of travel.
+- `lateral` offset is signed. **Verified 2026-09-23:** the shipped `TrackApi` reports
+  **positive = RIGHT of travel** (`pointAt(u, +1)` sits to the driver's right). Use
+  `|lateral|` for widths and let the AI's `_latSign` calibration handle sides.
+- Steering is a *separate* convention and **is** "positive = left": `input.steer > 0`
+  turns the kart left (yaw increases), and keyboard/gamepad/touch all map left → +1.
 
 ## Kart convention (frozen — Agent 1 owns, everyone relies on it)
 - A kart's local **forward is +Z**.

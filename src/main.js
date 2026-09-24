@@ -110,6 +110,8 @@ class TurboKart {
   // --------------------------------------------------------------- race -----
   startRace(config) {
     this.config = { ...this.config, ...config };
+    this.menus?.hide?.();
+    this.menus?.hidePause?.();
     this._disposeRace();
     bootStatus('Loading track…', 0.5);
 
@@ -118,6 +120,7 @@ class TurboKart {
     const builder = new TrackBuilder({ THREE, trackDef, meta });
     const trackApi = builder.build();
     this.engine.scene.add(trackApi.group);
+    this.engine.setTrack?.(trackApi); // shadow-camera fitting / ground queries
 
     const environment = createEnvironment({ THREE, trackApi, scene: this.engine.scene, quality: this.quality });
     if (environment?.group) this.engine.scene.add(environment.group);
@@ -147,6 +150,7 @@ class TurboKart {
         characterId,
         startIndex: i,
         difficulty: this.config.difficulty,
+        quality: this.quality,
       });
       this.engine.scene.add(kart.object3D);
       karts.push(kart);
@@ -187,6 +191,7 @@ class TurboKart {
     if (r.trackApi?.group?.parent) r.trackApi.group.parent.remove(r.trackApi.group);
     r.trackApi?.dispose?.();
     r.builder?.dispose?.();
+    this.engine?.setTrack?.(null);
     this.effects?.setTrack?.(null);
     this.hud?.hide?.();
     this.race = null;
@@ -229,6 +234,8 @@ class TurboKart {
     this.engine?.setQuality?.(this.quality);
     this.postfx?.setQuality?.(this.quality);
     this.effects?.setQuality?.(this.quality);
+    this.race?.environment?.setQuality?.(this.quality);
+    this.race?.karts?.forEach((k) => k.setQuality?.(this.quality));
     this.audio?.setVolumes?.({ master: this.settings.master, music: this.settings.music, sfx: this.settings.sfx });
     this.hud?.setQuality?.(this.quality);
   }
